@@ -5,4 +5,5 @@ RUN IMAGE   			: docker run -d -P <imagename>
 	-P is map to random port
 VIEW RUNNING IMGAGES	: docker ps -a
 VIEW PORTS				: docker port <sha>
-KILL RUNNING IMAGE		: docker rm <sha>
+KILL RUNNING IMAGE		: docker rm -f <sha>
+COMPOSE DOCKERS			: docker-compose up

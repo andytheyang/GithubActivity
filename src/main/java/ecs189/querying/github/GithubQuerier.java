@@ -19,6 +19,7 @@ public class GithubQuerier {
 
     private static final String BASE_URL = "https://api.github.com/users/";
 
+
     public static String eventsAsHTML(String user) throws IOException, ParseException {
         List<JSONObject> response = getEvents(user);
         StringBuilder sb = new StringBuilder();
