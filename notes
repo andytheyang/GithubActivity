@@ -1,0 +1,8 @@
+BUILD DOCKER			: docker build -t <name> .
+REMOVE IMAGES			: docker rmi <imagename>
+RUN IMAGE   			: docker run -d -P <imagename>
+	-d is to daemonize this process
+	-P is map to random port
+VIEW RUNNING IMGAGES	: docker ps -a
+VIEW PORTS				: docker port <sha>
+KILL RUNNING IMAGE		: docker rm <sha>
