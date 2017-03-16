@@ -18,12 +18,16 @@ import java.util.List;
 public class GithubQuerier {
 
     private static final String BASE_URL = "https://api.github.com/users/";
-
+    private static final int TOTAL_EVENTS = 10;
+    private static final String VALID_TYPE = "PushEvent";
 
     public static String eventsAsHTML(String user) throws IOException, ParseException {
         List<JSONObject> response = getEvents(user);
         StringBuilder sb = new StringBuilder();
         sb.append("<div>");
+
+        int numEvents = 0;
+
         for (int i = 0; i < response.size(); i++) {
             JSONObject event = response.get(i);
             // Get event type
@@ -39,10 +43,12 @@ public class GithubQuerier {
             sb.append("<h3 class=\"type\">");
             sb.append(type);
             sb.append("</h3>");
+
             // Add formatted date
             sb.append(" on ");
             sb.append(formatted);
             sb.append("<br />");
+
             // Add collapsible JSON textbox (don't worry about this for the homework; it's just a nice CSS thing I like)
             sb.append("<a data-toggle=\"collapse\" href=\"#event-" + i + "\">JSON</a>");
             sb.append("<div id=event-" + i + " class=\"collapse\" style=\"height: auto;\"> <pre>");
@@ -57,11 +63,35 @@ public class GithubQuerier {
         List<JSONObject> eventList = new ArrayList<JSONObject>();
         String url = BASE_URL + user + "/events";
         System.out.println(url);
-        JSONObject json = Util.queryAPI(new URL(url));
-        System.out.println(json);
-        JSONArray events = json.getJSONArray("root");
-        for (int i = 0; i < events.length() && i < 10; i++) {
-            eventList.add(events.getJSONObject(i));
+//        System.out.println(json);
+        int page = 0;
+        int numEvents = 0;
+
+        JSONObject json = null;
+        JSONArray events = null;
+
+//        System.out.println("URL: " + url + "?&access_token=6b6be0366f6b5ad854530e6a4171fb370300e0e1" + "&page=" + page);
+        json = Util.queryAPI(new URL(url + "?&access_token=6b6be0366f6b5ad854530e6a4171fb370300e0e1" + "&page=" + page++));
+        events = json.getJSONArray("root");
+
+        while (events.length() > 0) {
+            JSONObject thisEvent;
+
+            for (int i = 0; i < events.length() && (numEvents < TOTAL_EVENTS); i++) {
+                thisEvent = events.getJSONObject(i);
+
+                if (thisEvent.getString("type").equals(VALID_TYPE)) {       // only add pushevents
+                    eventList.add(thisEvent);
+                    numEvents++;
+                }
+            }
+
+            if (numEvents == TOTAL_EVENTS) {    // we at 10 events
+                break;
+            }
+
+            json = Util.queryAPI(new URL(url + "&access_token=6b6be0366f6b5ad854530e6a4171fb370300e0e1" + "&page=" + page++));
+            events = json.getJSONArray("root");
         }
         return eventList;
     }
