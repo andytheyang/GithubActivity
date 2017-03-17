@@ -92,8 +92,8 @@ public class GithubQuerier {
         JSONObject json = null;
         JSONArray events = null;
 
-//        System.out.println("URL: " + url + "?&access_token=6b6be0366f6b5ad854530e6a4171fb370300e0e1" + "&page=" + page);
-        json = Util.queryAPI(new URL(url + "?&access_token=6b6be0366f6b5ad854530e6a4171fb370300e0e1" + "&page=" + page++));
+
+        json = Util.queryAPI(new URL(url + "?&page=" + page++));
         events = json.getJSONArray("root");
 
         while (events.length() > 0) {
@@ -112,7 +112,7 @@ public class GithubQuerier {
                 break;
             }
 
-            json = Util.queryAPI(new URL(url + "&access_token=6b6be0366f6b5ad854530e6a4171fb370300e0e1" + "&page=" + page++));
+            json = Util.queryAPI(new URL(url + "?&page=" + page++));
             events = json.getJSONArray("root");
         }
         return eventList;

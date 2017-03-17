@@ -8,3 +8,4 @@ VIEW RUNNING IMAGES	: docker ps -a
 VIEW PORTS				: docker port <sha>
 KILL RUNNING IMAGE		: docker rm -f <sha>
 COMPOSE DOCKERS			: docker-compose up
+

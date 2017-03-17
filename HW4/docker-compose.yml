@@ -4,11 +4,10 @@ services:
     ports:
      - "8080"
     image: oldactivity
+    container_name: web1
 
   proxy:
     ports:
      - "8888:8888"
     image: nginx
-
-
-   
+    container_name: proxy
