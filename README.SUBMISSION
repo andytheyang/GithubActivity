@@ -1,0 +1,25 @@
+FILES CREATED:
+swap1.sh - adaptation of swap2.sh that reverses the swap (new->old)
+
+FILED MODIFIED:
+HW4/nginx-rev/Dockerfile - removed swap3.sh
+HW4/nginx-rev/init.sh - changed names of containers
+HW4/nginx-rev/swap2.sh- changed name
+HW4/dorun.sh - changed names of containers
+HW4/docker-compose.yml - added name field for new containers (web1,proxy)
+
+GithubQuerier.java - upgraded to print commit msgs and sha
+
+activity/ -> activityold/ - moved old activity image war
+activity/ - NEW activity image war with querier upgrade
+
+SWAP INSTRUCTIONS:
+
+0. docker build -t oldactivity activityold/ 							(builds old activity)
+0. docker build -t newactivity activity/
+1. ./dorun.sh 															(starts web1 and proxy)
+2. docker run -d -P --network ecs189_default --name web2 newactivity	(starts web2 NEW githubquerier)
+3. docker exec proxy /bin/bash /bin/swap2.sh							(enter proxy container, run bash interpreter on swap2.sh to update nginx.conf to point to web2)
+4. docker rm -f web1													(kill the process)
+
+
