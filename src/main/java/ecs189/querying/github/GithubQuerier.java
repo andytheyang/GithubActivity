@@ -39,6 +39,8 @@ public class GithubQuerier {
             Date date = inFormat.parse(creationDate);
             String formatted = outFormat.format(date);
 
+            JSONArray commits = event.getJSONObject("payload").getJSONArray("commits");
+
             // Add type of event as header
             sb.append("<h3 class=\"type\">");
             sb.append(type);
@@ -54,6 +56,26 @@ public class GithubQuerier {
             sb.append("<div id=event-" + i + " class=\"collapse\" style=\"height: auto;\"> <pre>");
             sb.append(event.toString());
             sb.append("</pre> </div>");
+
+            if (commits.length() > 0) {
+                sb.append("<table border =\"1\">");
+                sb.append("<th>SHA</th>");
+                sb.append("<th>Commit Message</th>");
+                sb.append("<tr>");
+                sb.append("</tr>");
+
+
+                for (int commitnum = 0; commitnum < commits.length(); commitnum++) {
+                    JSONObject commit = commits.getJSONObject(commitnum);
+
+                    sb.append("<tr>");
+                    sb.append("<td>" + commit.getString("sha").substring(0, 8) + "</td>");
+                    sb.append("<td>" + commit.getString("message") + "</td>");
+                    sb.append("</tr>");
+                }
+
+                sb.append("</table>");
+            }
         }
         sb.append("</div>");
         return sb.toString();
